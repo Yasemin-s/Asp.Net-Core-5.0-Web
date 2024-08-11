@@ -32,7 +32,17 @@ User clientı kullanarak internet girer, peki internete nasıl giriyor ? Şimdi 
 
 ✨ Hosting Nedir ? ✨
 
+Normalde ben kendi web sitemi www.gencayyildiz.com u kendi bilgisayarımda dış dünayaya açabilirim. Hosting firmaları 7/24 yayında tutabilmemizi sağlayan bilgisayarları barındıran firmalardır. Hosting/server/sunucu yerine cloud sistemleri de kullanılabilir (azure, amazon gibi). 
 
+User client üzerinden servera istek atıyor. Bu istek sonucunda hosting uygulamayı çalıştırarak sonucunda bana yani clienta response dönüyor. 
 
+Sunucuya istek atma/gönderme (Request) : Client üzerinden userın yaptığı istektir. Request içerisinde, hangi adrese/ipye/domaine istek gönderildiği bilgisi tutulur. Clientın yeryüzünde binlerce domaini olabilir. Bunlardan hangisine istek göndereceğimizi ayırt edebilir. Buradaki ayırt etme operasyonu ip üzerinden sağlanır. Ip dediğimiz, birbirinden bağımsız unique/farklı/benzersiz kimliktir. Demek ki, hostingin ipsi varmış. Daha doğrusu senin web sitene bir tane ip veriyor bu hosting. Sen bu ipye istek gönderiyorsun. 
 
+Sunucudan clienta istek dönmesi/cevap vermesi (Response) : Sunucu tarafından clienta dönen cevaptır. Bu cevap server tarafından üretilen resultu da barındırabiliyor. İlla ki result olmak zorunda değildir. Örnek bir istek yapılır cevap döner ama bu cevapta result olmak zorunda değildir. 
+
+Request, ip/adres/domain bilgisini taşıyor. Sen bir web sitesine istek göndereceksen giden isteğin headerında www.gencayyildiz.com var oraya istek at diyoruz. İstek sonucunda o isteği web uygulaması arkada çalıştırıyor. O istek hangi sayfayı render edecekese oluşturuyor ve oluşumu sonucunda bir tane result oluşturuyor. Oluşan resultı hosting, response olarak geriye döndürüyor. Yani üretilen web çıktısını bize geri getiriyor. 
+
+API'yi tüketen farklı clientlar vardır. Sonuçlar o clientlarda da elde edilebilir illa browser olmasına gerek yok. Dolayısıyla normal bir internet kullanıcısı tarayıcı üzerinden bu istekleri yaptığı için hostinden/sunucudan gelen render edilen sonuç/result yeniden browsera gönderilir. Request sonucunda gelen result browsera yüklenir. Sende ekranda görmüş olursun. 
+
+👉 ! Ip, anlamsız sayısal değerlerdir. Domain, ip'ye yönlendirilmiş anlamlı metinsel değerlerdir. 
 
