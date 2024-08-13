@@ -71,3 +71,13 @@ MVC, MVVM (Model-View-ViewModel) veya MVP (Model-View-Presenter) gibi benzer des
 Sonuç olarak, MVC bir framework değil, bir tasarım desenidir. Frameworkler bu deseni uygulayabilir, ancak MVC'nin kendisi belirli bir teknoloji veya implementasyona bağlı değildir. 
 
 ✨✨
+
+👋 3 - Application Programming Interface (API) Yaklaşımı
+
+Uygulama programlama arayüzüdür.
+Webde çalışabilen ve web uygulamaları, işletim sistemleri, veri tabanı, donanımlar veya yazılım kütüphaneleri ile iletişim kurabilen bir arayüzdür. 
+Direkt olarak web uygulaması yaklaşımıdır diyemeyiz. Çünkü web uygulamasının dışındada kullanılan bir yapılanmadır. Bu yüzden her yerde kullanabilirsin ama web uygulamasında da kullanabildiğimiz için bu yaklaşımı benimseyebiliriz. Bir web uygulaması backendde api ile verileri üretebilir. Api genellikle web tabanlı uygulamalarda client ve server arasındaki iletişimi sağlayan bir sözleşme olarak kullanılmaktadır. Bu forma web api denmektedir. 
+
+Apiyi, web üzerinde çalışan bir backend oalrak düşün. Herhangi bir görsel yanı yok ve http protokolü üzerinden her yerden istek alabiliyor. Eğer ki sen bir apiye web sayfası üzerinden istek gönderiyorsan client olarak, buradaki client web sayfası oluyor server ise api oluyor. İşte burada apiye gönderdiğin istek sonucunda sana gelecek olan verilerer burda sözleşme olarak nitelendirilebilir. Şöyle düşün, bana tüm personelleri getir şeklinde apiye istek yapıyorsun bu istek sonucunda sunucudan/serverdan/apiden sana personeller belirli formatta geliyor. Belirli formatın türünü vs. sözleşme diye nitelendirebiliyoruz. Burda entity kavramı bizim için sözleşmedir. 
+
+Apiyi web uygulamalarında kullanıyorsak biz buna web api diyoruz. Peki api sadece webde mi kullanılıyor? Tabiki hayır, nesnelerin interneti denen olay bunun temeliden geliyor. Siz telefonu tableti vs. apiye bağlayıp internetten yönetebilir yada farklı nesnelerle iletişim kurabilir hale getirebilirsiniz eğer ki bu nesnelerden biri web ise buna web api diyoruz. Api ile bir çok nesneyi internete bağlayabilirsiniz. Api bir web geliştirme mimarisidir.
