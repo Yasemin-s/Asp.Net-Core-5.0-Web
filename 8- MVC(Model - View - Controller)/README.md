@@ -180,5 +180,40 @@ Açılan ekranda razor view empty seçtik. Daha sonra açılan sayfada ,
 
 Viewa isim vermemiz gerek. Bu ismi action ile birebir aynı isim yapmalısın. 
 
+![14-22](https://github.com/user-attachments/assets/f2aaec89-a7f5-4baa-a683-dad080a3b29d)
 
+View dosyaları .cshtml uzantılı dosyalardır. cs + html kodlarının birlikte kullanıldığı formattır/sayfadır. Biz bu formata Razor teknolojisi diyoruz. Asp.net yada asp.net core , mvc mimarisinde viewı kodlayabilmemiz için, viewde hızlı bir şekilde ui tabanlı çalışmalar gerçekleştirebilmemiz için geliştirilmiş bir teknolojidir. Viewda yani html içinde C# kodlarını çalıştırmamızı sağlayan bir teknolojidir Razor.
 
+Action içindeki return artık isteğin artık isteğin clienta response edilmesi gibi düşünebilirsin. İsteği gönderdiğimizde ilgili action bunu karşılıyor ve kendi viewını render ettirip sonucu/view resultı bize/clienta gönderiyor.
+
+Bir action üzerinden viewı tetikleyebilmek yani controller viewa gidip, veri görselleştirmek istiyorsa View isimli fonksiyonu çağırması gerekiyor.
+
+![14-23](https://github.com/user-attachments/assets/c4f8bdc8-57a2-435f-83f5-49f5a8169dd1)
+
+Controller, istek geldiğinde return View üstünde kalan kısımda veriiy üretir. Eğer lazımsa modela gider/bağlanır. Modeldan verileri çeker. Çektikten sonra elinde veriler hazır olur, bunları viewa gönderir. Viewe gönderirkende view fonksiyonuna bakarsanız görebilirsiniz. 
+
+![14-24](https://github.com/user-attachments/assets/a29844ba-bbbf-4602-afe8-1a32b3f545ab)
+
+View fonksiyonu ilgili actiona ait view (.cshtml) dosasını tetikleyecek fonksiyondur.
+
+![14-25](https://github.com/user-attachments/assets/358931c8-6805-4cf8-9005-ff717bb8a376)
+
+Viewı çağırdığımızda geriye ViewResult dönüyor. 
+
+![14-26](https://github.com/user-attachments/assets/624f47c4-22a9-4fcb-a48d-d9b207bf1242)
+
+Bu şekilde result, viewdan bana dönen cevaptır. Bu cevabıda kullanıcıya istersem bu şekilde gösterebilirim. 
+
+![14-27](https://github.com/user-attachments/assets/8ad48404-7cc9-402b-a81b-b7c2f758e498)
+
+View kısmında eğer birden fazla view (.cshtml) dosyan varsa view içine ViewName vererek ilgili .cshtml dosyasını kullanabilirsin.
+
+Projeye models klasörü/katmanı ekliyoruz. Adı models olmak zorunda değil ama genellikle model view controller olur. Models altında ef coredaki contextin olur, entitylerin olur. Models altındaki sınıfları kullanmak aslında modela gitmektir. Veritabanı işlemleri, değerler, nesnelere ihtiyacın olursa bu models kısımları aktif kullanılacaktır.
+
+Controllerda bu şekilde kullanman, 
+
+![14-28](https://github.com/user-attachments/assets/7a8b223f-69ba-4ccb-b2a7-4aa8123ff017)
+
+Controllerdan modela gitmen demek aslında. İstekleri ilk başta controller karşılıyor. Varsa modela gidiyor. Modeldan veriyi geri alıyor. İşte modeldan veriyi alması/modela gidipp ilgili namespace altındaki sınıfları kullanarak veriyi üretmesi oluyor. Aldıktan sonra eğer ihtiyaç varsa view e gider. Viewde gerekli makyaı yayapr controllera geri gelir. Ve bunu da kullanıcıya geri döndürür.
+
+![14-29](https://github.com/user-attachments/assets/f5abe908-ec23-4bce-804d-85c5e83e85b7)
