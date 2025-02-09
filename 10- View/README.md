@@ -69,3 +69,80 @@ Burada büyük M, foreach içinde kullanılmıştır.
 ![17-6](https://github.com/user-attachments/assets/5b764496-697b-45a1-afbe-8513bd73571c)
 
 Çalıştırdığımız View çıktısının kaynağını incele desek, C# kodları görünmez. Render sırasında C# kodları açıklanıyor ve sadece render sonucu, yani C# sonucu bize HTML çıktısı veriliyor.
+
+✨ Veri Taşıma Kontrolleri - ViewBag ✨ 
+
+![17-7](https://github.com/user-attachments/assets/00c39123-1f86-4851-b14c-df453e5c504e)
+
+![17-8](https://github.com/user-attachments/assets/580283b2-92cb-49a9-80c9-8130e3d0d19f)
+
+View'e gönderilecek/taşınacak datayı dinamik şekilde tanımlanan bir değişkenle taşımamızı sağlayan bir veri taşıma kontrolüdür.
+ViewBag, ViewData ve TempData'ya erişim sağlayabilmek için Controller'da, yani base class'ımızdaki tanımlanmış olan bu property'leri kullanır.
+
+![17-9](https://github.com/user-attachments/assets/e6afe8d8-65b3-491e-9986-b7557ecc7ad8)
+
+![17-10](https://github.com/user-attachments/assets/032f06e6-270d-44e7-96af-98c10c48d572)
+
+![17-11](https://github.com/user-attachments/assets/4e4909c6-cce2-42da-a2f6-839af7032b8a)
+
+Ben eğer ki action içinde ViewBag. deyip herhangi bir değişken tanımlarsam, örneğin ViewBag.Ahmet dersem, view'e "Ahmet" olarak gidecektir. Bu çalışma sonucunda hangi view'e render ediliyorsan, o view'e ViewBag ile veri gönderilmiş olur. Controller ve view kısımları görseldeki şekildedir.
+
+![17-12](https://github.com/user-attachments/assets/92c216b2-910e-4b0b-8ee1-2190949467f8)
+
+Burada gelen datamız dinamik olduğu için runtime'da şekillenecektir. Runtime'da türü belli olacak. Bizim derleme zamanında, yani development aşamasında da bu türü belirleyebilmemiz için ilgili dönüşümü sağlamamız gerek. as List<..> kısmını <li> kısmında @Product. dediğimizde değerlerin bu şekilde gelebilmesi için development aşamasında türünün belli olması gerekiyordu ve o yüzden bu şekilde yazdık.
+
+Diğer türlü türünü belirtmeseydik, as List ile . dediğimizde herhangi bir şey gelemeyecekti çünkü dinamik olduğu için tür runtime'da belli olacaktı.
+
+
+✨ Veri Taşıma Kontrolleri - ViewData ✨ 
+
+ViewBag'de olduğu gibi action'daki datayı view'e taşımamızı sağlayan bir kontroldür. İlgili datayı boxing ederek taşır. ViewData, indexer ile kullanılıyor.
+ViewBag, ilgili datayı dynamic ile yani runtime'da türü belli olacak şekilde taşıyordu. ViewData ise ilgili datayı boxing ile taşıyor. Dolayısıyla view'da senin bu datayı unboxing ederek taşıman gerekecektir.
+
+![17-13](https://github.com/user-attachments/assets/d502563f-7305-4fde-b655-6fc74dbcf2b6)
+
+Burada ViewData object olarak değer alır, yani kullanmak istersen unboxing yapmalısın. as ile ya da cast ile unboxing edebilirsin. 
+
+![17-14](https://github.com/user-attachments/assets/6eb16790-11ef-4cfc-b2fd-fa65107827d5)
+
+
+✨ Veri Taşıma Kontrolleri - TempData ✨ 
+
+
+ViewData'da olduğu gibi action'daki datayı view'e taşımamızı sağlayan bir kontroldür. İlgili datayı boxing ederek taşır. Yine indexer olarak kullanılır. View'da unboxing yaparak kullanmanı bekler. Peki, TempData ve ViewData arasındaki fark nedir?
+
+Biz action'larda kendi aralarında yönlendirme yapabiliyoruz. Örneğin, Index action'ı işlemleri bitirdikten sonra kullanıcıya response göndermeden önce başka bir action'a daha giderek/redirect işlemi gerçekleştirilebiliyoruz/yönlendirilebiliyoruz. O action'da da operasyonlar gerçekleştirdikten sonra kullanıcıya response dönebiliriz. Böyle bir durumda farklı bir action'a yönlendirme söz konusu olursa TempData kullanılır. TempData yapılanması arka planda esasında bir cookie kullanılır. Cookie üzerinden veri taşır.
+
+![17-15](https://github.com/user-attachments/assets/d0f90628-48af-4640-af00-2f7f805be6ef)
+
+Burada TempData bir cookie oluşturmuş.
+
+TempData için gelin yönlendirme kısmını inceleyelim.
+
+![17-16](https://github.com/user-attachments/assets/a2b2fd6e-a8f3-4a69-a33f-18410a3cd28e)
+
+Burada Index2 action'ına yönlendirmiş olduk. Eğer controller adını da vermek istersen 4. overload'da çıkar. Controller belirterek de ilgili controller altındaki action'a yönlendirme yapabilirsin.
+
+![17-17](https://github.com/user-attachments/assets/b353eb01-3787-4afb-a8f1-14c599e8f4b3)
+
+TempData'da yönlendirme esnasında bir nesne/koleksiyon kullanıyorsan, yani başka controller altındaki action'a ya da farklı action'a gönderecek veri nesnesi ise bu atayı evridir. Dolayısıyla bizim bu nesneyi bir şekilde serileştirmemiz gerekiyor. İlerleyen başlıklarda açıklamasını yapacağız.
+
+![17-18](https://github.com/user-attachments/assets/54a6335f-dbb4-4a75-8023-f607acac6afb)
+
+Burada complex/nesne değil de direkt değer ile taşıma işlemine bakacağız. Sadece TempData ile ilgili veri taşınmıştır, diğerleri null gelmiştir. Yani TempData, action'lar arasında veri taşımamızı sağlayan veri taşıma kontrolüdür. Peki, nasıl taşıyor bu veriyi? Hata sayfasında kaynağı incele dersek, cookie sayesinde veriyi taşıdığını görürüz.
+
+![17-19](https://github.com/user-attachments/assets/6746ed0e-1931-4390-9af5-42756e4e1822)
+
+TempData, cookie üzerinden veriyi taşıyor. Dolayısıyla, cookie'ye ilgili verinin dönüştürülebilmesi yani serialize edilebilmesi gerekiyor. Serialize edilebilmesi için basit türlerde sıkıntı yok ama bu nesne/complex tür olursa burada ekstra bir maliyet olacaktır ve bunu normalde gerçekleştiremediği için proje patlar. Eğer ki taşımaya çalıştığımız veri complex type ise hata veriyor; complex türün cookie'ye dönüştürülemediğinden dolayı. Dolayısıyla bizim yapmamız gereken şu: TempData'ya complex tür vereceksek, bu complex türü de serialize ederek vermemiz gerekir. Bunun için de JSON serialize dediğimiz .NET 5.0'da gelen bir kütüphaneyi kullanabiliriz. Bu kütüphane üzerinden elimizdeki complex türü JSON formata serialize edebileceğiz. 
+
+![17-20](https://github.com/user-attachments/assets/0c7718f1-ff99-4102-aeba-fe03a9330430)
+
+![17-21](https://github.com/user-attachments/assets/aaa9cec3-1b2b-46c5-8ad6-cd6edc17ecea)
+
+Bu işlemle artık serialize edilen complex değer, string formatta data'ya atanacak ve data değeri ilgili action'a gönderilecektir. İlgili action'da tekrar yönlendirme olmayacaksa orada kullanılacaksa, tekrardan deserialize işlemine tabi tutulması gerekir.
+
+Yani ,
+
+![17-22](https://github.com/user-attachments/assets/434703eb-bfad-4f90-b9d5-8f93cf7c980f)
+
+Buradan ne olarak elde etmek istiyorsam, generic olarak da bildiriyorum. Aynı zamanda bizim TempData'ya verdiğimiz değer object olarak geleceğinden, önce bunu string olarak elde etmeliyiz. Ondan sonra deserialize için string olarak elde edilen datayı veriyorum.
