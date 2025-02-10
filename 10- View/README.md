@@ -146,3 +146,48 @@ Yani ,
 ![17-22](https://github.com/user-attachments/assets/434703eb-bfad-4f90-b9d5-8f93cf7c980f)
 
 Buradan ne olarak elde etmek istiyorsam, generic olarak da bildiriyorum. Aynı zamanda bizim TempData'ya verdiğimiz değer object olarak geleceğinden, önce bunu string olarak elde etmeliyiz. Ondan sonra deserialize için string olarak elde edilen datayı veriyorum.
+
+
+👋 18 - View'e Tuple Nesne Gönderimi ve Kullanımı
+
+
+Controller'da elde edilen bir Tuple nesnesinin nasıl View'e gönderildiğini inceliyor olacağız. Controller'da üretilen Tuple nesnesi birden fazla nesneyi tarif eden bir nesne olacağı için, bunu bu semantikle View'e nasıl taşıyabildiğimizi ele alacağız. Birden fazla değeri bir Tuple olarak kullanmaksızın veri taşıma kontrolleri ile de verileri taşıyabiliriz.
+
+
+✨ Tuple Nesnesi ✨
+
+
+İçinde birden fazla değeri/veriyi/nesneyi referans edebilen ve semantik açıdan dilin bize kazandırmış olduğu söz dizimine sahip olan bir nesnedir. Şöyle düşünebilirsin: Biz birden fazla veri/nesneyi bir bütün olarak kullanabilmek için ne yapıyoruz? ViewModel dediğimiz modelleri tasarlıyoruz. Bir ViewModel üzerinde birden fazla nesneyi referans edip temsil edip tek bir nesne üzerinde kullanabiliyoruz. Ya da Tuple syntax'ı ile hızlı bir şekilde ViewModel gibi değerler üretebilirsiniz.
+
+
+![18-1](https://github.com/user-attachments/assets/7105d8a0-62c7-4f4a-8230-832b085e3bac)
+
+Biz şunu yapacağız: Action içinde 2 farklı nesne var, bu nesneleri tek seferde ilgili View'a göndereceğiz. Bunu normalde 2 farklı işlemle yapıyoruz: biri Tuple, diğeri ViewModel.
+
+ViewModel ile taşımak istersek: Öncelikle yapmam gereken bir ViewModel oluşturmak. Models klasörü altına ViewModels adında klasör oluşturuyorum ve içinde UserProduct adında sınıf oluşturuyorum. Aslında göndereceğim 2 farklı nesneye referans edebilecek bir sınıf/nesne oluşturuyorum.
+
+![18-2](https://github.com/user-attachments/assets/ca4fffbe-4b1a-4aa9-96d4-4d18f8f49eaa)
+
+Burada referanslara vermiş olduğum ilgili nesneleri UserProduct nesnesi üzerinden kullanacağım/erişebileceğim ve biz buna ViewModel diyeceğiz.
+
+![18-3](https://github.com/user-attachments/assets/1c3c6029-076d-4d5e-99bc-26fc82827e0e)
+
+İlgili Action içinde, UserProduct'ta oluşturduğum ilgili property'lere elimdeki nesneleri referans ederek ViewModel ile çalışabiliyoruz. UserProduct'ı da View ile return ediyoruz.
+
+![18-4](https://github.com/user-attachments/assets/08f31e3d-9779-4087-a31f-bdc9769f8864)
+
+GetProduct.cshtml kısmında ise namespace ile gelecek olan verinin türü belirtildi ve kullanıldı.
+
+👉 ! Tuple nesnesi ile nasıl yaparız:
+
+![18-5](https://github.com/user-attachments/assets/24c5cdd6-d3d6-4d03-ab2c-8ba38060b51d)
+
+Yine ilgili Action içinde Tuple nesnesi olarak nesnelerimizi verdik. View ile de return edip gönderdik. Bu nesne View tarafında karşılanacaktır. View kısmında gelen nesnenin türüne göre tanımlama yapıyorduk/tür bildiriyorduk. Gelen nesne Tuple olduğu için birden fazla nesne içerdiğinden
+
+![18-6](https://github.com/user-attachments/assets/500dbe88-d24a-4d87-be9c-81c48ea007a3)
+
+şeklinde türlerimizi bildirdik. Bu nesneleri kullanmak istediğimizde @Model kısmında Item1, Item2 şeklinde kullanım olacaktır. Editör bunu soldan sağa hizalı olarak atamalar yapıyor. Yani Product için Item1, ... şeklinde oluyor.
+
+![18-7](https://github.com/user-attachments/assets/ec314f7b-531a-46ff-a9ac-778fe107a971)
+
+Ama sen bunları Item1 ... şeklinde değil, kendin isim vermek istersen tür bildirirken bunları da bildirmen gerek.
