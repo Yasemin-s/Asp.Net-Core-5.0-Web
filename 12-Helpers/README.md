@@ -321,17 +321,26 @@ Ancak diğer kullanımda dikkat edilirse, saliseli kısım değişiyor.
 
 
 Image TagHelper, ETag yöntemini otomatik olarak kullanmamızı sağlar.
+
 ETag (Entity Tag), bir jeton (token) oluşturarak statik dosyalarda değişiklik olup olmadığını belirler.
+
 ✔ Eğer bir statik dosyada değişiklik yoksa, istemciye yeniden indirme yapmadan mevcut önbellekteki sürümü kullanmasını söyler.
+
 ✔ Bu sayede gereksiz veri transferi önlenir ve performans artırılır.
+
 🔹 Yani, ETag sayesinde statik dosyalarda değişiklik olmadıkça istemciye aynı dosya tekrar gönderilmez.
+
 🔹 Eğer kaynakta bulunan statik dosya değişirse, ETag değeri de değişir.
+
 🔹 Bu durumda, istemcinin önbelleğinde bulunan eski dosya artık geçerli olmaz.
+
 🔹 Sunucu, yeni dosyanın güncellenmiş halini istemciye gönderir.
+
 
 ✅ Bu sayede, önbelleğe alınmış eski içerik yerine en güncel versiyon otomatik olarak kullanılır.
 
 Özet:
+
 📌 Cache'deki dosya, kaynakta değiştiyse, önbellekteki eski sürüm silinir ve size gerçek (güncellenmiş) dosya teslim edilir.
 
 👉 ! ASP.NET Core'da Tag Helper kullanırsan, Image Tag Helper otomatik olarak ETag yönetimini yapar. Ancak, HTML Helper kullanıyorsan, dosyanın değişip değişmediğini manuel olarak kontrol edip, gerekirse yeni sürümünü yüklemen gerekir.
@@ -346,6 +355,7 @@ ETag (Entity Tag), bir jeton (token) oluşturarak statik dosyalarda değişiklik
 ![22-10](https://github.com/user-attachments/assets/0de0bf0b-e0f1-467a-a470-2c4cbcf858e1)
 
 ![22-11](https://github.com/user-attachments/assets/98269001-bf1b-491b-bd92-1cf22fed4eaa)
+
 
 📌 İleride göreceğimiz ViewImport.cshtml adında bir dosyamız olacak ve bu dosyada tanımladığımız using direktifleri veya belirli kütüphaneler tüm view'lar tarafından erişilebilir olacak. Dolayısıyla, TagHelper'ı da burada tanımlayacağız. Bu sayede, tek tek gidip tüm view'larda tanımlamak zorunda kalmayacağız. Ancak, bazı view'lerde TagHelper kullanmak istemeyebiliriz. Bunun için ilgili view'de @remove TagHelper kullanarak, yalnızca o sayfa için TagHelper'ı pasifleştirebiliriz.
 
