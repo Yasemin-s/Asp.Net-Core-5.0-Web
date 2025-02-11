@@ -1,4 +1,4 @@
-👋 20 - URLHelpers - HTMLHelpers Fonksiyonları
+![21-1](https://github.com/user-attachments/assets/ffe2c8ae-d5f5-4259-b15a-8ca599ef76b0)👋 20 - URLHelpers - HTMLHelpers Fonksiyonları
 
 Yardımcı metotlarımız olan helpers'ları inceleyeceğiz. Helpers yapılanması ASP.NET Core MVC'de UrlHelper, HtmlHelper, ve TagHelper olarak üçe ayrılır.
 
@@ -191,3 +191,69 @@ Hem çıktıyı verir hem de linki oluşturur.
 
 Burada bir TextBox oluşturmak bile sunucu taraflı gerçekleşeceği için sunucuyu yorar/maliyetli olur. Bu maliyeti ortadan kaldırmak için Tag Helper dediğimiz yapılanmalar ortaya çıkmıştır.
 ASP.NET Core MVC ile gelen Tag Helper yapılanmaları, Html Helper'lara göre daha hızlı ve daha efektiftir.
+
+
+👋 21 - Custom HtmlHelper Fonksiyonu Oluşturma
+
+
+
+Html helper'ların nasıl customize edildiğini, yani custom HtmlHelper oluşturmayı ele alacağız.
+HtmlHelper'lar, HTML nesneleri oluştururken bize yardımcı olan, hazır metotlarımızı barındıran bir kütüphane/sınıftır. Dolayısıyla bu sınıf üzerinden oluşturduğumuz HTML nesneleri, server tabanlı olarak ilgili sayfayı view'e basabiliyoruz. Bunun maliyeti ve performans zayıflığı vardır. Eğer HtmlHelper'ları kullanıyorsak, varsayılan çıktıları özelleştirebiliyoruz.
+
+![21-1](https://github.com/user-attachments/assets/140b1692-abda-4856-9a53-cbb9b89059cb)
+
+HtmlHelper yapılanmasında TextBox ya da kullandığınız helper fonksiyonu hangisi ise, diğer overload'larına bakarsanız belirli farklı parametreler aldığını görürsünüz.
+
+Biz TextBox nesnesi üzerinden örneklendirme yaparken htmlAttribute ile HTML attributeleri verebiliyoruz. 4. overload'u kullanıyoruz.
+Attribute/Property'ye karşılık değerler oluşturulacak, yani generate edilecek olan HTML nesnesine, o input çıktısına attribute/özellik olarak eklenecektir.
+
+![21-2](https://github.com/user-attachments/assets/c04619d7-fbd3-4b0c-b040-616355b23cb3)
+
+![21-3](https://github.com/user-attachments/assets/e488bc9c-a966-40e9-9421-19bcde43e2c4)
+
+Burada "a" verdiğim attribute, çıktıya value/attribute olarak eklenmiştir.
+
+👉 !   Biz her HTML nesnesi talep ettiğimizde, talep ettiğimiz anda bunun ayarlarını vermek zorunda mıyız?
+
+
+Eğer birçok noktada customize edilecek HTML formatlarına ihtiyaç varsa, biz custom bir şekilde sırf o işe odaklı HTML nesnesi oluşturabiliriz. Nasıl oluşturacağız? Bir extension oluşturarak yazacağız.
+
+![21-4](https://github.com/user-attachments/assets/11fde0e9-5e21-46d9-943a-447011618349)
+
+Extension metot yazmadan önce, HtmlHelper'larımızın türüne bakacağız. TextBox için bize IHtmlContent olarak sonuç dönüyor.
+Demek ki benim customize edeceğim extension fonksiyonunun da IHtmlContent döndürmesi gerekiyor.
+
+HtmlHelper üzerinde erişilebilir bir custom HtmlHelper oluşturacağım için, IHtmlHelper’a özel yazmam gerek. 
+
+![21-5](https://github.com/user-attachments/assets/5bf6a255-28a6-442d-b7d9-ebc7691ecd26)
+
+Dolayısıyla hangi türde bir extension oluşturacaksam (IHtmlHelper), bu extension hangi türde sonuç dönecekse (IHtmlContent), bu bilgilere göre artık rahatlıkla extension oluşturabileceğiz.
+
+Başka bir deyişle, custom HtmlHelper'ımı tasarlayabilirim.
+
+
+✨ Custom HTML Helper Tasarlama ✨
+
+
+Proje altına Extensions adında bir klasör oluşturuyorum ve içine ismi önemsiz olmaksızın herhangi bir sınıf oluşturuyorum (biz Extensions adında sınıf oluşturacağız).
+Extensions sınıfında extension metot tanımlayabilmem için ilgili sınıfı static olarak işaretliyorum.
+
+Ardından static extension fonksiyonumu tanımlıyorum.
+TextBox için IHtmlContent döneceğinden, oluşturacağım metoda ona göre dönüş türü veriyorum.
+Bu metodu extension metot yapabilmemiz için, IHtmlHelper türünden bir this parametresi alması gerek.
+
+![21-6](https://github.com/user-attachments/assets/1800ac03-47fd-4310-96db-b0e17ad1713f)
+
+Artık bu fonksiyon, mimarideki IHtmlHelper türlerine extension olarak eklenmiştir.
+
+Hangi HTML Helper nesnesi üzerinde çalışıyorsak, metottaki parametre bana o nesneyi getiriyordu.
+En son geriye de TextBox’ı döndürüyoruz.
+
+👉 !  @class ile class’ın bir isim olduğunu, keyword olmadığını belirttik.
+
+İlgili oluşturduğum custom TextBox’ı kullanmak istersem,
+.cshtml dosyasında ilgili extension fonksiyonunun bulunduğu namespace’i using etmem gerek. 
+
+![21-7](https://github.com/user-attachments/assets/9e05a097-5684-4905-8509-4cebe1acbe9f)
+
+Özetle, Bir şeyin custom halini oluşturmak istiyorsan, extension fonksiyonlarını kullanabilirsin. Bir yapının customize edilmiş halini extension ile çok rahat yapabilirsin.
