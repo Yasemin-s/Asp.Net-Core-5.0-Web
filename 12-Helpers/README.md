@@ -115,3 +115,79 @@ Birden fazla rota olduğunda, isim belirterek uygun URL oluşturulabilir.
 O anki URL'ye dair tüm bilgilere erişmemizi sağlayan bir özelliktir. Gelen isteğe dair bize bilgi veren bu property ile URL, controller, action gibi bilgileri elde edebiliriz.
 
 ![20-7](https://github.com/user-attachments/assets/3332d0c3-88dc-40da-8a4b-36efbedb1bcf)
+
+✨ HTML Helper ✨
+
+
+Hem maliyetli hem de performanslı yapılanmalardır. TagHelper'lar ise daha az maliyetli ve daha performanslı yapılardır.
+
+HTML etiketlerini server tabanlı oluşturmamızı sağlayan sözde yardımcı metotları barındırmaktadır. Sözde yardımcı metot denmesinin sebebi, gereksiz yere servera yük bindirmesidir.
+
+Hedeflenen .cshtml dosyalarını render etmemizi sağlar.
+O anki bağlama (context) dair bilgiler edinmemizi sağlar.
+Veri taşıma kontrollerine erişmemizi sağlar.
+
+👉 !  Metotlar ve Property'ler:
+
+![20-8](https://github.com/user-attachments/assets/b916a9d2-f2b3-48ed-baf8-e7b3850a1a40)
+
+Buradaki TempData, ViewData ve ViewBag; veri taşıma kontrollerine erişebilmemiz için view üzerinde ekstra bir şey tanımlamamıza gerek kalmaz. HTML Helper üzerinden de erişim sağlayabiliyoruz.
+
+✨ HTML Partial Metodu ✨
+
+
+Hedef view'ı render etmemizi sağlayan bir fonksiyondur.
+Controller'dan gelen istek neticesinde render etmek zorunda değilsiniz. Bir view içerisindeyken belirli bir noktada Html.Partial ile hedef view'i çağırıp onu render edebilir ve çıktısını o noktaya verebilirsiniz. Yani illa controller'dan istek gitmesine gerek yoktur.
+
+![20-9](https://github.com/user-attachments/assets/a8288e4b-0138-423c-9b86-a52fef449dc0)
+
+
+
+✨ Render Edilen View’e Model/Data Gönderme ✨
+
+
+Render edilen view'e ilgili action'dan model/data gönderilebilmektedir. Örneğin bir istek geldi ve A controller içindeki B action'ındasınız. B action'ından B view'ına gittiniz, B view'ında C view'ını çağırdığınızı düşünelim. C view'ına data gönderecekseniz A'dan B üzerinden data taşımanız gerekir. C'yi tetiklediğiniz nokta B view'ıdır. B view'ında da partial üzerinden tetiklediğiniz için, eğer bir model/data ihtiyacı varsa bunu A üzerinden taşımanız gerekmektedir.
+
+
+👉 !  Örnek:
+
+
+Views altında Partials klasörü altına ListPartial adında bir view oluşturuyorum. Farklı bir view'e (GetProducts.cshtml) controller üzerinden render talebi geldiğinde, ilgili view'i render ederken bir yandan da ListPartial.cshtml'i render etmek istiyorsam, GetProducts.cshtml'de partial'ın dizinini de belirterek şu şekilde kullanırım: 
+
+![20-10](https://github.com/user-attachments/assets/3c84714c-1826-45f2-97c2-9d78e1023a6d)
+
+
+Aynı zamanda ListPartial'da belirli bir model/sınıf kullanmak istersek bu veriyi nereden alacağım? Veriyi, hangi controller üzerinde tetikleme gerçekleştiriliyorsa (GetProducts'ı tetikleyen controller) oradan almam gerekir. Controller'dan view'e (GetProducts) taşınan veri, GetProducts'ta kullanılan tüm partial view'lara da taşınır.
+
+
+👉 !   Dikkat Edilmesi Gereken Noktalar:
+
+
+Eğer GetProducts'a User adında bir model gönderecekseniz, bu normalde GetProducts.cshtml'deki partial view'e User adlı model gider. Ancak GetProducts'ta User adında bir model kullanıp, GetProducts içindeki partial view'da farklı bir model kullanmak/göndermek isterseniz, işte o zaman partial'ı çağırdığınız yerde 2. parametre olarak göndereceğiniz modeli belirtmeniz gerekir.
+
+![20-11](https://github.com/user-attachments/assets/89048fc9-533b-46a5-bb3d-f1e52743ba70)
+
+Yada ilgili modeli oluşturabilirsiniz.
+
+![20-12](https://github.com/user-attachments/assets/26f3ec84-1e36-4978-b073-752a345f2f7a)
+
+
+✨ Html RenderPartial Metodu ✨
+
+![20-13](https://github.com/user-attachments/assets/b6f2520c-0ef0-4da8-829d-02b93765fcde)
+
+Partial, scope'a gerek kalmadan tek satırda çağrılabilirken, Html.RenderPartial ise scope içinde çağrılmaktadır. Bunun sebebi, Partial geriye string döndürürken Html.RenderPartial void döndürüyor/yani bir şey döndürmüyor ve bunu da tetikleyebilmek için scope içinde C# kuralları ile kullanmak gerekir.
+Html.Partial'a göre, Html.RenderPartial daha hızlıdır.
+
+✨ Html ActionLink Metodu ✨
+
+![20-14](https://github.com/user-attachments/assets/2a489599-442d-43f9-b1e4-e6a18704ab4b)
+
+Hem çıktıyı verir hem de linki oluşturur.
+
+✨ Html Form Metotları ✨
+
+![20-15](https://github.com/user-attachments/assets/a45f7ea4-658b-4a5d-8fce-90d6d4550659)
+
+Burada bir TextBox oluşturmak bile sunucu taraflı gerçekleşeceği için sunucuyu yorar/maliyetli olur. Bu maliyeti ortadan kaldırmak için Tag Helper dediğimiz yapılanmalar ortaya çıkmıştır.
+ASP.NET Core MVC ile gelen Tag Helper yapılanmaları, Html Helper'lara göre daha hızlı ve daha efektiftir.
