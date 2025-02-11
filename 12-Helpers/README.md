@@ -1,4 +1,4 @@
-![21-1](https://github.com/user-attachments/assets/ffe2c8ae-d5f5-4259-b15a-8ca599ef76b0)👋 20 - URLHelpers - HTMLHelpers Fonksiyonları
+👋 20 - URLHelpers - HTMLHelpers Fonksiyonları
 
 Yardımcı metotlarımız olan helpers'ları inceleyeceğiz. Helpers yapılanması ASP.NET Core MVC'de UrlHelper, HtmlHelper, ve TagHelper olarak üçe ayrılır.
 
