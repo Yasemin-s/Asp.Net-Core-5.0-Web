@@ -257,3 +257,104 @@ En son geriye de TextBox’ı döndürüyoruz.
 ![21-7](https://github.com/user-attachments/assets/9e05a097-5684-4905-8509-4cebe1acbe9f)
 
 Özetle, Bir şeyin custom halini oluşturmak istiyorsan, extension fonksiyonlarını kullanabilirsin. Bir yapının customize edilmiş halini extension ile çok rahat yapabilirsin.
+
+
+👋 22 - TagHelpers
+
+
+TagHelper'lar, HTML Helper'ların yerine gelen yeni yapılanmalardır. Peki, bunlar nedir?
+TagHelper'lar, daha okunabilir, anlaşılabilir ve kolay geliştirilebilir bir view inşa etmemizi sağlayan, ASP.NET Core ile birlikte HTML Helper'ların yerine gelen bir yapılanmadır.
+
+
+
+✨ TagHelpers vs HTML Helpers ✨
+
+![22-1](https://github.com/user-attachments/assets/8eb6c423-fd06-4d00-8d70-38e54dd23091)
+
+![22-4](https://github.com/user-attachments/assets/b52e3500-3b6d-4ef1-9fc5-38600e75c34a)
+
+✨ TagHelper Entegrasyonu ✨
+
+
+TagHelper'ı kullanabilmek için öncelikle view'lere belirli bir kütüphaneyi entegre etmemiz gerekecek.
+Bir view üzerinde TagHelper kullanacaksam, ilgili kütüphaneyi view'e entegre etmeliyim.
+
+👉 ! @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+👉 ! TagHelper'lar özünde bir sınıf olduklarından, belirli bir kütüphaneyi içinde barındırılmalıdır.
+
+👋 HTML Nesnelerinde TagHelper Kullanımı 
+
+✨ Form TagHelper ✨
+
+![22-2](https://github.com/user-attachments/assets/4edb9d51-b49f-46ca-8033-55f0a74d2888)
+
+![22-4](https://github.com/user-attachments/assets/e08dc8bb-a614-4665-8496-fae3eca2c989)
+
+👉 ! TagHelper'ın aktif olup olmadığını kontrol etmek için, bir HTML nesnesi üzerine gelip asp yazdığınızda, eğer ki @asp çıkıyorsa, kütüphane doğru yazılmış ve TagHelper kullanılıyor demektir. 
+
+![22-3](https://github.com/user-attachments/assets/75baf373-9af7-4590-828a-929d64a3a0e8)
+
+✨ Input TagHelper ✨
+
+Input nesnelerinde kullanabildiğimiz, bu nesneler üzerinde belirli model binding işlemlerinde vs. kullandığımız TagHelper'lardır.
+
+![22-5](https://github.com/user-attachments/assets/5fb0dee3-7143-46af-b2e0-60933e044ce2)
+
+
+✨ Cache TagHelper ✨
+
+![22-6](https://github.com/user-attachments/assets/4ec48d3b-e67b-4083-b9a0-81084312fd87)
+
+![22-7](https://github.com/user-attachments/assets/ac9ba10a-3549-41df-859f-eb7f5b4eb576)
+
+InMemory'de cache'lenir.
+Sayfayı her yenilediğimizde, cache tag'li olan kısım cache'den gelir ve yenilenmez.
+Ancak diğer kullanımda dikkat edilirse, saliseli kısım değişiyor.
+
+✨ Environment TagHelper ✨
+
+![22-8](https://github.com/user-attachments/assets/7d2913f3-831b-4d06-a3d1-6a3213738e4e)
+
+
+✨ Image TagHelper ve ETag Kullanımı ✨
+
+
+Image TagHelper, ETag yöntemini otomatik olarak kullanmamızı sağlar.
+ETag (Entity Tag), bir jeton (token) oluşturarak statik dosyalarda değişiklik olup olmadığını belirler.
+✔ Eğer bir statik dosyada değişiklik yoksa, istemciye yeniden indirme yapmadan mevcut önbellekteki sürümü kullanmasını söyler.
+✔ Bu sayede gereksiz veri transferi önlenir ve performans artırılır.
+🔹 Yani, ETag sayesinde statik dosyalarda değişiklik olmadıkça istemciye aynı dosya tekrar gönderilmez.
+🔹 Eğer kaynakta bulunan statik dosya değişirse, ETag değeri de değişir.
+🔹 Bu durumda, istemcinin önbelleğinde bulunan eski dosya artık geçerli olmaz.
+🔹 Sunucu, yeni dosyanın güncellenmiş halini istemciye gönderir.
+
+✅ Bu sayede, önbelleğe alınmış eski içerik yerine en güncel versiyon otomatik olarak kullanılır.
+
+Özet:
+📌 Cache'deki dosya, kaynakta değiştiyse, önbellekteki eski sürüm silinir ve size gerçek (güncellenmiş) dosya teslim edilir.
+
+👉 ! ASP.NET Core'da Tag Helper kullanırsan, Image Tag Helper otomatik olarak ETag yönetimini yapar. Ancak, HTML Helper kullanıyorsan, dosyanın değişip değişmediğini manuel olarak kontrol edip, gerekirse yeni sürümünü yüklemen gerekir.
+
+
+✨  Partial TagHelper  ✨
+
+![22-9](https://github.com/user-attachments/assets/f76d2b9d-01a6-4952-82da-95a51f7ea57c)
+
+👉 ! TagHelper'ları Eklediğimiz View'lerden Tekrar Kaldırabiliriz
+
+![22-10](https://github.com/user-attachments/assets/0de0bf0b-e0f1-467a-a470-2c4cbcf858e1)
+
+![22-11](https://github.com/user-attachments/assets/98269001-bf1b-491b-bd92-1cf22fed4eaa)
+
+📌 İleride göreceğimiz ViewImport.cshtml adında bir dosyamız olacak ve bu dosyada tanımladığımız using direktifleri veya belirli kütüphaneler tüm view'lar tarafından erişilebilir olacak. Dolayısıyla, TagHelper'ı da burada tanımlayacağız. Bu sayede, tek tek gidip tüm view'larda tanımlamak zorunda kalmayacağız. Ancak, bazı view'lerde TagHelper kullanmak istemeyebiliriz. Bunun için ilgili view'de @remove TagHelper kullanarak, yalnızca o sayfa için TagHelper'ı pasifleştirebiliriz.
+
+
+
+
+
+
+
+
+
+
