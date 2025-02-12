@@ -324,24 +324,10 @@ Image TagHelper, ETag yöntemini otomatik olarak kullanmamızı sağlar.
 
 ETag (Entity Tag), bir jeton (token) oluşturarak statik dosyalarda değişiklik olup olmadığını belirler.
 
-✔ Eğer bir statik dosyada değişiklik yoksa, istemciye yeniden indirme yapmadan mevcut önbellekteki sürümü kullanmasını söyler.
-
-✔ Bu sayede gereksiz veri transferi önlenir ve performans artırılır.
-
-🔹 Yani, ETag sayesinde statik dosyalarda değişiklik olmadıkça istemciye aynı dosya tekrar gönderilmez.
-
-🔹 Eğer kaynakta bulunan statik dosya değişirse, ETag değeri de değişir.
-
-🔹 Bu durumda, istemcinin önbelleğinde bulunan eski dosya artık geçerli olmaz.
-
-🔹 Sunucu, yeni dosyanın güncellenmiş halini istemciye gönderir.
+Eğer bir statik dosyada değişiklik yoksa, istemciye yeniden indirme yapmadan mevcut önbellekteki sürümü kullanmasını söyler. Bu sayede gereksiz veri transferi önlenir ve performans artırılır. Yani, ETag sayesinde statik dosyalarda değişiklik olmadıkça istemciye aynı dosya tekrar gönderilmez. Eğer kaynakta bulunan statik dosya değişirse, ETag değeri de değişir. Bu durumda, istemcinin önbelleğinde bulunan eski dosya artık geçerli olmaz. Sunucu, yeni dosyanın güncellenmiş halini istemciye gönderir. Bu sayede, önbelleğe alınmış eski içerik yerine en güncel versiyon otomatik olarak kullanılır.
 
 
-✅ Bu sayede, önbelleğe alınmış eski içerik yerine en güncel versiyon otomatik olarak kullanılır.
-
-Özet:
-
-📌 Cache'deki dosya, kaynakta değiştiyse, önbellekteki eski sürüm silinir ve size gerçek (güncellenmiş) dosya teslim edilir.
+👉 !  Cache'deki dosya, kaynakta değiştiyse, önbellekteki eski sürüm silinir ve size gerçek (güncellenmiş) dosya teslim edilir.
 
 👉 ! ASP.NET Core'da Tag Helper kullanırsan, Image Tag Helper otomatik olarak ETag yönetimini yapar. Ancak, HTML Helper kullanıyorsan, dosyanın değişip değişmediğini manuel olarak kontrol edip, gerekirse yeni sürümünü yüklemen gerekir.
 
@@ -357,8 +343,88 @@ ETag (Entity Tag), bir jeton (token) oluşturarak statik dosyalarda değişiklik
 ![22-11](https://github.com/user-attachments/assets/98269001-bf1b-491b-bd92-1cf22fed4eaa)
 
 
-📌 İleride göreceğimiz ViewImport.cshtml adında bir dosyamız olacak ve bu dosyada tanımladığımız using direktifleri veya belirli kütüphaneler tüm view'lar tarafından erişilebilir olacak. Dolayısıyla, TagHelper'ı da burada tanımlayacağız. Bu sayede, tek tek gidip tüm view'larda tanımlamak zorunda kalmayacağız. Ancak, bazı view'lerde TagHelper kullanmak istemeyebiliriz. Bunun için ilgili view'de @remove TagHelper kullanarak, yalnızca o sayfa için TagHelper'ı pasifleştirebiliriz.
+👉 ! İleride göreceğimiz ViewImport.cshtml adında bir dosyamız olacak ve bu dosyada tanımladığımız using direktifleri veya belirli kütüphaneler tüm view'lar tarafından erişilebilir olacak. Dolayısıyla, TagHelper'ı da burada tanımlayacağız. Bu sayede, tek tek gidip tüm view'larda tanımlamak zorunda kalmayacağız. Ancak, bazı view'lerde TagHelper kullanmak istemeyebiliriz. Bunun için ilgili view'de @remove TagHelper kullanarak, yalnızca o sayfa için TagHelper'ı pasifleştirebiliriz.
 
+
+✨  Tag Helper Çalışma Mantığı  ✨
+
+
+Tag Helper, bizden aldığı değerleri kullanarak arka planda uygun yapıyı oluşturur ve gerekli ayarlamaları yapar
+
+
+✨  Tag Helper'da Attribute Kullanımı  ✨
+
+CSHTML içinde TagHelper kullanırken, belirttiğimiz attribute'lara (<email a="abc"></email>) TagHelper sınıfı içinde erişebiliriz.
+
+TagHelper sınıfında Process metodunu override ediyoruz. Bu metot, bize iki parametre getirir: context ve output.
+
+context parametresi:
+
+TagHelper’a verdiğimiz tüm değerleri içerir.
+O an tetiklenen TagHelper’ın tüm özelliklerini getirir.
+output parametresi:
+
+Bu TagHelper’ın yapacağı işlemleri belirler.
+Kullanılan TagHelper’ın yerine oluşturulacak çıktıyı sunar.
+Process metodu, ilgili TagHelper’ın işlemlerini gerçekleştirdiği fonksiyondur.
+
+CSHTML render edilirken:
+
+TagHelper’ın bağlı olduğu sınıf tetiklenir.
+Bu sınıftan bir nesne oluşturulur.
+Oluşturulan nesne için Process fonksiyonu doğrudan çalıştırılır.
+Fonksiyon çağrılırken context parametresi ile birlikte gelir.
+Bu context içinde, ilgili attribute'lara dair tüm değerler bulunur.
+
+![23-4](https://github.com/user-attachments/assets/1a773dee-9c4f-442f-8bcd-22916ee3cedc)
+
+İle gösterildiği gibi işlem gerçekleşir.
+
+
+Biz <email a="abc"></email> bu şekilde attribute'ları karşılayabiliriz ama TagHelper üzerinden alacağımız attribute'leri property olarak alırsak, direkt .cshtml'de tanımlanabilir hale gelecektir. 
+
+![23-5](https://github.com/user-attachments/assets/6fc62f96-743d-4d3f-97ba-f9afef3cd882)
+
+![23-6](https://github.com/user-attachments/assets/3be14162-c34b-446f-a4e9-66c28709dfc7)
+
+.cshtml'deki ilgili değerleri TagHelper'dan aldığımız zaman, ki bunlar property ise, .cshtml'de direkt property ile eşleşme olacaktır ve TagHelper'daki o property'lerle bind edilecektir.
+
+Process parametresindeki context ya da output attribute kısmında da ilgili attribute'ları görebilirsin.
+Burada, a herhangi bir eşleşme olmadığında name kısmında a olarak görünür.
+Diğer attribute'lerde ise, hangi property ile eşleşme olduysa onun adı name kısmında yazar. 
+
+![23-7](https://github.com/user-attachments/assets/eb1fc12c-84d8-43b7-9d41-70595d6c890e)
+
+![23-8](https://github.com/user-attachments/assets/69b9af23-e7dd-44fb-8713-1c195e798d59)
+
+![23-9](https://github.com/user-attachments/assets/27170c13-9955-47d1-9d9d-38bfb3e16318)
+
+---
+
+![23-10](https://github.com/user-attachments/assets/3847dfb4-d562-4838-ad8b-3e2a0f287ff5)
+
+![23-11](https://github.com/user-attachments/assets/7980eedd-d5fa-4e83-8be8-ccbfd24cc5cf)
+
+![23-12](https://github.com/user-attachments/assets/f7d4536b-d8d5-4f90-bd9d-ea25f63056ff)
+
+![23-13](https://github.com/user-attachments/assets/db717811-a4e2-4609-813b-a4a352e7b59d)
+
+Bu şekilde output kullandığımızda, çıktı olarak/kaynağı incele dediğimizde <a> tag'i verecektir.
+
+TagHelper'da property değerleri alır.
+Process metodu bu değerleri işleyip output verir.
+
+Bir TagHelper oluşturduğunda, oluşturduğun TagHelper adını sınıftan almakta veya verdiğin sınıf dışında farklı bir isim vermek istiyorsan HtmlTargetElement üzerinden verebilirsin. 
+
+![23-14](https://github.com/user-attachments/assets/71f495a6-e48e-47af-ae30-5a8abde03ddc)
+
+![23-15](https://github.com/user-attachments/assets/c9b5e464-80bf-4e00-b2b3-f249b67ec76e)
+
+Örnekte, Ahmet adını verdik ve .cshtml'de artık Ahmet olarak çalıştırdık.
+
+Özetle: 
+
+![23-16](https://github.com/user-attachments/assets/2fc077af-16ca-461e-9087-3b12d5d6cd8f)
 
 
 
