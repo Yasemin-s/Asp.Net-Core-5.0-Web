@@ -113,3 +113,88 @@ QueryString parametrelerine/o parametrelere karşılık gelecek property isimler
 ![26-8](https://github.com/user-attachments/assets/e6b023dd-c545-4126-8625-80696c3e8ef3)
 
 ![26-9](https://github.com/user-attachments/assets/02692a34-ed72-473e-927a-99e3909bb329)
+
+
+👋 27 - Kullanıcıdan Veri Alma Yöntemleri - Route Parametresi Üzerinden Veri Alma
+
+
+
+Startup.cs’de Configure içinde UseEndpoints middleware’i içinde, client’tan server’a gelecek olan isteklerin rotalarını belirliyorduk. Peki, route parametreleri nedir?
+
+Bu rota üzerinde biz değerler taşıyabiliriz. Aynen QueryString gibi. Rotanın içine belirli değerleri gömebiliyoruz/kullanabiliyoruz. Bunlarla beraber istek yaptığımızda ilgili değerler sunucuya gönderilmiş oluyor. QueryString’e çok benzemiş olur.
+
+Peki, nasıl değerler gönderebiliyoruz? Rotalar zaten kendi fıtratında parametrelerden oluşuyor. Default olan rotaya bakarsak, bizzat parametrelerden/değerlerden oluşan rotalardan ibaret:
+
+👉 ! controller/action/id bunların hepsi birer parametredir.
+
+![27-1](https://github.com/user-attachments/assets/062caf4b-3e7b-4f48-8545-ad5e49d357d2)
+
+Dolayısıyla, rotalarda custom parametreler tanımlayıp o parametreye uygun koyduğumuz değeri sunucuya gönderebiliyoruz.
+
+👉 ! Peki, bunun QueryString’ten ne farkı var? 
+
+![27-2](https://github.com/user-attachments/assets/063608dc-8162-43a0-801e-1e1780d9936c)
+
+QueryString, güvenli olmayan verilerde kullandığımız bir veri taşıyıcıyken, route’lara yerleştirdiğimiz gömülü parametrelerde en azından güvenlik bir nebze olsun sağlanabilmektedir. Örnekte de ikinci route kullanımında, Max’in name değeri olduğu bilinmemektedir. Daha uygun/güvenli/gizli formatta URL oluşturmamızı sağlıyor.
+
+👉 ! Route üzerinde taşınan veriler nasıl yakalanır?
+
+Route üzerinde veri taşıyabilmek için, route’un ilgili veriyi karşılayabileceği bir parametreye ihtiyacı vardır. Eğer ki default’u kullanıyorsak id parametresi vardır. id haricinde bir şey/parametre olmasını istiyorsan, işte bu durum özelleştirmeye giriyor. Yani artık custom rotalar oluşturmamız gerekiyor.
+
+Önce route yapılanmasında id üzerinden parametre/değer taşımayı inceleyeceğiz. Devamında özel rotalar oluşturup bunların incelemesini yapacağız.
+
+
+✨ Default'taki Var Olan id İçin İnceleme ✨
+
+
+
+Default olarak id parametresi var. Bu id parametresine yerleştirilen değeri action metotta yakalamak istiyorsam, yapmam gereken sadece rotaya uygun/yakalamak istediğim parametreye uygun bir değişken tanımlamak.
+
+Id yi string, int, object hangisinde istiyorsan karşılayabilirsin ve parametre adıyla birebir aynı ismi vererek action metot parametresine yazıyorsun/oluşturuyorsun. 
+
+![27-3](https://github.com/user-attachments/assets/2303cc5b-a12c-4e27-af9d-d3a8b8bd1327)
+
+Parametre adı ile route’tan gelecek olan parametre adı birebir aynıdır ve bu şekilde id parametresi değerini yakalamış oluyoruz. 
+
+![27-4](https://github.com/user-attachments/assets/e1d55c8c-0624-487d-8c0f-1045fc319f67)
+
+![27-5](https://github.com/user-attachments/assets/f43fe43f-0259-444c-bb78-fdeabe1d503a)
+
+
+✨ Custom Rota Oluşturarak İnceleyelim ✨
+
+
+
+"endpoints.MapControllerRoute()" ile özel rota belirleyebiliyoruz. Öncelikle rotamıza isim veriyoruz. Ardından pattern/şablon/şeması nasıl olacak, bunu {} içinde yazıyoruz.
+
+![27-6](https://github.com/user-attachments/assets/22b52687-35c6-467d-85e9-c98b0380e39a)
+
+
+Controller action içinde ise parametre kısmında, tek tek route’ta kullandığımız parametreleri yakalıyoruz. 
+
+![27-7](https://github.com/user-attachments/assets/b373cc10-57e4-4abb-ac73-159f4ed27e6f)
+
+Aynı zamanda sınıf/model üzerinden de yakalayabiliyoruz.
+
+![27-8](https://github.com/user-attachments/assets/d62d8f1a-eeff-431b-b322-fd6a768d4f4a)
+
+![27-9](https://github.com/user-attachments/assets/d15dec46-59fd-40e8-a887-1033a0b5c708)
+
+![27-10](https://github.com/user-attachments/assets/9ca3d2b2-66d3-4289-bcba-3c90497391af)
+
+Dikkat edilirse A = 0 oldu, ancak hata vermedi. Aslında string gönderdik ama modelimizde int tanımlı olduğu için A = 0 oldu.
+
+
+👉 ! QueryString ve Route Farkı, route yapılanmaları, veriyi daha gizli taşımayı sağlıyor.
+
+Oluşturduğumuz URL’lerdeki route parametrelerine ve QueryString değerlerine nasıl TagHelper ile değer atayabildiğimizi inceleyeceğiz.
+
+![27-11](https://github.com/user-attachments/assets/47d02e33-d61c-49ab-b08c-a3dfde50403d)
+
+Buradaki değerler bizim rotamızda parametre olarak tanımlandığından, vermiş olduğumuz değerler rotaya uygun bir şekilde yerleştirilecektir.
+
+Ayrıca senin tanımladığın rotada olmayan bir parametre, route’ta yoksa eğer, QueryString olarak yerleştirilecek/kullanılacaktır. Buradaki x gibi.
+
+![27-12](https://github.com/user-attachments/assets/1fa6e87b-e4bb-460b-bf43-05eacaba44c2)
+
+![27-13](https://github.com/user-attachments/assets/f2574a64-e33d-4ba1-952b-d06a0aca0f6f)
