@@ -195,6 +195,106 @@ Buradaki değerler bizim rotamızda parametre olarak tanımlandığından, vermi
 
 Ayrıca senin tanımladığın rotada olmayan bir parametre, route’ta yoksa eğer, QueryString olarak yerleştirilecek/kullanılacaktır. Buradaki x gibi.
 
+
 ![27-12](https://github.com/user-attachments/assets/1fa6e87b-e4bb-460b-bf43-05eacaba44c2)
 
 ![27-13](https://github.com/user-attachments/assets/f2574a64-e33d-4ba1-952b-d06a0aca0f6f)
+
+
+
+👋 28 - Kullanıcıdan Veri Alma Yöntemleri –  Header Üzerinden Veri Alma
+
+
+
+Kullanıcının göndermiş olduğu request/HTTP isteğinde bulunan veridir. Header'lar genellikle ilgili istekle alakalı nitelikleri barındırır. Header'lar, isteklerde belirli verileri taşımamızı sağlayan nitelendirici kalıptır/başlıklardır.
+
+Postman, yapısal olarak bir istekte bulunmamızı sağlayan bir arayüz tanıyor bize. Öncelikle route belirliyoruz ve ona göre ilgili sunucuya istekte bulunuyoruz.
+Header'lar, request üzerinden Headers property'si üzerinden yakalanır. "Request.Headers" şeklinde. Uygulamayı çalıştırdığımızda Kestrel sunucu ayağa kalkıyor ve route dizinini sana veriyor. 
+
+![28-1](https://github.com/user-attachments/assets/6b119577-954e-45bf-a47e-8ad3da178560)
+
+![28-2](https://github.com/user-attachments/assets/f5e0e22d-f977-4652-8f79-2254d0b27879)
+
+Postman'da isteği yazdık ve Headers kısmına Key (Adi) - Value (Gencay) diyerek istekte bulundum. Action'da ise bu bilgileri Headers kısmında görebiliyorum. 
+
+![28-3](https://github.com/user-attachments/assets/6a87a8b3-48ef-45b2-bd90-c933091c505e)
+
+Header'da taşınan veride Türkçe karakter olmamalıdır.
+
+
+
+👋 29 - Kullanıcıdan Veri Alma Yöntemleri –   AJAX Tabanlı Veri Alma
+
+
+👉 ! AJAX, client tabanlı istek yapmamızı sağlayan ve bu isteklerin sonucunu almamızı sağlayan bir JavaScript temelli mimaridir.
+
+Bir uygulamada client tabanlı çalışabilmek/AJAX tabanlı çalışabilmek için AJAX'ı destekleyen herhangi bir UI teknolojisi/kütüphaneyi kullanmak gerekir. Biz jQuery kullanacağız. jQuery'yi resmi sayfasından indirerek sıkıştırılmış olan linki alıp projemizde "script" tagı içinde "src" kısmına veriyoruz. Daha sonra CSHTML'de gerekli kodlarımızı yazıyoruz. CSHTML'de JavaScript objesi gönderdik POST içinde.
+
+![29-1](https://github.com/user-attachments/assets/cbe45285-45b2-4fc3-8c49-f1329260ad52)
+
+Action metotta yakalayabilmek için obje adıyla birebir aynı bir model/sınıf tanımlıyoruz ve o sınıf üzerinden Action metotta yakalıyoruz. Gelen JSON formattaki datayı ilgili türe dönüşümünü MVC mimarisi kendisi yapıyor.
+
+![29-2](https://github.com/user-attachments/assets/0b8425d0-5025-4f67-b767-66233553d6a7)
+
+AJAXData'ya deserialize işlemi gerçekleştirilmiş oluyor. Normalde bu dönüşüm yapılmasaydı, bizim Action metotta gelen veriyi string olarak karşılamamız gerekirdi ve metot içinde gerekli/uygun türe dönüştürmemiz gerekirdi.
+
+👉 ! Dikkat edilirse Action metotun vermiş olduğu hata şu şekilde açıklanabilir: 
+
+
+Public olan bir metotun dışarıdan erişilemez bir türe sahip parametresi olduğu için metot hata veriyordu. Dolayısıyla biz AJAXData sınıfını da public yapmalıyız.
+
+Bir API'de çalışıyorsan ve kullandığın UI'in port adresi ya da protokol bilgileri değişiyorsa CORS politikalarına girmek gerekir. İleride incelenecektir.
+
+
+👋 30 - Tuple Nesne Post Etme ve Yakalama
+
+
+Tuple nesnesi, tek bir tanımlama ile içine birden fazla değer/nesneyi barındırabilen değişkendir. MVC mimarisinde genellikle View katmanında tekil nesneler model olarak kullanılsa da bazı durumlarda Tuple nesneleri model olarak kullanmamız gerekebilir.
+
+Öncelikle bir View'ın herhangi bir türle bind edilebilmesi için modelin belirtilmesi gerekir. Eğer bu tür Tuple nesnesi ise yine de Tuple nesnesinin türünün bildirilmesi gerek.
+
+![30-1](https://github.com/user-attachments/assets/372b4674-cb7b-486b-9e5d-d28810c79cb9)
+
+Aynı zamanda asp-for da bizim türümüz Tuple olduğu için Item1, Item2 olarak geliyor. Hatırlarsanız, Item1, Item2 isimlerini değiştirmek istersek tür bildirirken istediğimiz ismi de bildirerek değiştirebiliyoruz.
+
+View'da bind edilen nesne artık tekil bir nesne değil, içinde birden fazla değer barındıran bir Tuple nesnesi. Dolayısıyla Tuple nesnesini barındıran ve buna bind edilmiş bir View'ı/Formu post ettiğimizde, yakalayacak olan Action'da farklı bir bind işlemi yapmamız gerekecek.
+
+
+✨ Yapılabilecek yanlışlıklar ✨
+
+![30-2](https://github.com/user-attachments/assets/7ae9ae7a-7a19-436b-b1d3-1bc467768e15)
+
+![30-3](https://github.com/user-attachments/assets/6ac3803f-1528-4376-af3d-279423ed2e6d)
+
+CSHTML'deki türlere göre Action metotta ilgili nesneyi karşılamaya çalışırsak bu şekilde veriler gelmez/yakalayamayız.
+
+Tuple nesnesi üzerinden bind işlemi yapacaksan, öncelikle Tuple nesnesinin içinde bulunan nesnelerin null olmaması gerekiyor. Tuple nesnesi içinde değerlerin olması gerekir. Peki bu değerleri nasıl vereceğiz? İlgili formu açacak olan GET Action metodundan veriyoruz.
+
+![30-4](https://github.com/user-attachments/assets/447a6f89-fe7b-42ff-9b60-bd2845507cb5)
+
+Şeklinde nesneler oluşturduk, içinde herhangi bir property'ye karşılık gelecek olan değer yok ama null da değildir. Artık property'ler direkt bind edilecektir.
+
+Artık null hatası alınmayacaktır. Ancak proje çalıştırılıp formu doldurup gönder dediğimizde, ilgili nesnelerin Action metodunda karşılanamadığına dair/o nesneleri initialize edemediğine/oluşturamadığına dair hata verecektir.
+
+👉 ! O zaman nasıl karşılayacağız?
+
+
+
+CSHTML'de türleri, Action metodunda ayrı ayrı parametre olarak tanımlamalıyız.
+
+![30-5](https://github.com/user-attachments/assets/be3ab6be-a2d9-433a-9af9-7a9c222b12c0)
+
+Ancak bu şekilde değişiklik yaptığımızda da Action metot isteği karşılamış ama verilerin içi null, yani bind işlemi CSHTML tarafında yapılırken Action metotta neden yakalayamadık?
+
+Gönderilen data Tuple türünden olduğu için, Action metotta bizim hangi nesneye ait parametre olduklarını Item ile bind ederek [Bind(Prefix="Item1")] şeklinde bildirmemiz gerekecek.
+
+![30-6](https://github.com/user-attachments/assets/1e42b029-9f90-4b4c-ade1-72f3ab181248)
+
+👉 ! Burada önemli detay:
+
+
+
+CSHTML'de Item1 için Product ismini kullandık, peki Action metotta neden vermiş olduğumuz "product" adını kullanmadık da Item1 kullandık?
+Biz CSHTML'de her ne kadar farklı isim versek de, Prefix ile bind ederken soldan sağa Item1, Item2 ... olacak şekilde isimlendirmek gerekiyor.
+
+Bu işlemlerden sonra Tuple nesnesi artık Action metot tarafından karşılanabilir hale gelecektir.
