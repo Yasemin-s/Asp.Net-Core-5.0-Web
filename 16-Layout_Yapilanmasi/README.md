@@ -79,3 +79,64 @@ RenderSection, View’de ekstra alan tanımlamanı sağlar. Ana RenderBody’nin
 RenderSection genellikle: JS referansları Sayfadan sayfaya fark eden alanlar için kullanılır. Örneğin, AView ve BView olsun. BView’ında sen JavaScript kullanıyorsan, render ederken JS referanslarına ihtiyacın var. Bunu BView’ında ilgili Layout’a ekletmek istiyorsan Section’u kullanabilirsin. 
 
 ![35-11](https://github.com/user-attachments/assets/156c2947-ef8c-49b1-9b40-f39d949d855c)
+
+👋 36 - _ViewStart ve _ViewImports Dosyaları Nedir?
+
+
+✨ _ViewStart Dosyası ✨ 
+
+_ViewStart dosyasının asıl amacı, tüm view’lerde kullanılması gereken ortak işlemlerin yapılmasını sağlamaktır. _ViewStart da aslında bir .cshtml dosyasıdır. View ile ilgili çalışma yaptığımız tüm operatif view’ler özünde bir .cshtml dosyasıdır, örneğin layout’ta olduğu gibi.
+
+_ViewStart bir nevi tüm view’lerin atasıdır. Herhangi bir view’i sunucuda render ediyorsanız, eğer varsa önce _ViewStart dosyası render edilir, ardından ilgili view’iniz render edilir. Views klasörü altında _ViewStart.cshtml olarak oluşturulması gerekir, aksi takdirde herhangi bir view’in başlangıç view’i olup olmadığını belirleyemeyiz.
+
+
+✨ _ViewStart ne amaçla kullanılır? ✨
+
+
+
+Genellikle tüm view’lerin ortak kullanacağı layout tanımlaması bu dosya içerisinde gerçekleştirilir.
+
+Örneğin, biz üç farklı sayfada ayrı ayrı layout tanımlaması yapmıştık.
+
+![36-1](https://github.com/user-attachments/assets/22898a95-e04e-4e51-a783-bfa696280748)
+
+Dolayısıyla, her sayfa için ayrı ayrı layout tanımlamak yerine tek bir noktada tanımlamak istersek, bunu sağlayacak tek dosya _ViewStart dosyası olacaktır. Views klasörü içinde _ViewStart.cshtml adında bir view oluşturuyoruz. Bu dosya sistem tarafından başlangıç view’i olarak nitelendirilecektir.
+
+Diğer tüm view’lerde kullandığımız layout yapılanmasını _ViewStart içinde tanımladığımızda, proje çalıştığında herhangi bir view çalışmadan önce _ViewStart çalışır. _ViewStart içinde layout tanımlandığı için, önce bu layout ekrana gelir ve daha sonra ilgili view’in çıktısı gösterilir.
+
+Eğer herhangi bir view’de layout tanımlamasını ezmek (iptal etmek) istiyorsanız, yapmanız gereken işlem ilgili view’de Layout = null; yapmak veya kullanmak istediğiniz layout’un path’ini yazmaktır.
+
+![36-2](https://github.com/user-attachments/assets/1929507c-17ee-443b-8054-44d0f0e4c086)
+
+
+✨ _ViewImports Dosyası ✨ 
+
+Razor sayfaları için kütüphane ve namespace tanımlamalarını her sayfa için ayrı ayrı yapmak yerine, ortak/merkezi bir noktada tanımlamamızı sağlayan bir dosyadır.
+
+_ViewImports ve _ViewStart dosyaları aslında ortak tanımlama dosyalarıdır. Aralarındaki teknik fark şudur: _ViewImports.cshtml → Programatik tanımlamaları yapar (örneğin using blokları, namespace tanımlamaları, TagHelper tanımlamaları). _ViewStart.cshtml → Programatik işlemler dışında, layout gibi ortak kullanılan HTML tabanlı işlemleri yapar. _ViewImports içinde import işlemlerini gerçekleştiririz. Programatik import işlemleri burada sağlanır.
+
+👉 ! Views klasörü altında _ViewImports.cshtml adıyla oluşturulur.
+
+
+Örneğin, herhangi bir view’de bir türe/nesneye/sınıfa erişmem gerekiyorsa @model ya da @using olarak erişim sağlayabiliyorduk/bildirebiliyorduk.
+
+![36-3](https://github.com/user-attachments/assets/14358c61-7122-4a68-99f5-782c35447229)
+
+Bu şekilde, sınıflarımızı view bazlı kullanılabilir hale getiriyorduk. Peki, tüm view’lerde tek tek bu şekilde tanımlama mı yapacağız? Model katmanındaki entity’lere bütün view’lerden erişmek istiyorum. Bunun gibi genel tanımlamaları _ViewImports.cshtml dosyası altında gerçekleştiriyoruz. Views klasörü altına _ViewImports.cshtml adında bir dosya oluşturuyoruz. _ViewImports dosyası içinde yapılan tüm using tanımlamaları mimaride global bir şekilde erişilebilir olacaktır. Örneğin, _ViewImports.cshtml dosyasında: @using LayoutExample.Models
+dediğimde, artık bu namespace altındaki sınıflara tüm view’lerden erişim sağlanabilecektir.
+
+![36-4](https://github.com/user-attachments/assets/1d6819c3-6dc6-4086-8df0-f3483ec5000a)
+
+![36-5](https://github.com/user-attachments/assets/e78e8b93-6451-4aa2-af02-911dce8c3893)
+
+Belirli bir namespace altındaki sınıflara erişebilmem için tekrar tekrar namespace tanımlaması yapmama gerek kalmıyor. _ViewImports üzerinden yapılan bu çalışma neticesinde tüm view’lere gerekli using tanımlamaları tek çatı altında yapılmış oluyor.
+
+_ViewImports dosyasında TagHelper tanımlamasını da yapabiliyoruz.
+
+![36-6](https://github.com/user-attachments/assets/8a4ab702-094a-4d7a-a302-efa711825108)
+
+Bu tanımlamalar sayesinde artık herhangi bir view’de ilgili TagHelper’lara erişim sağlayabilir duruma geliyoruz.
+
+![36-7](https://github.com/user-attachments/assets/234689c7-704b-4868-bb6a-4975dfc5a501)
+
+Dikkat edilirse, asp- dediğimizde otomatik olarak gelmektedir, yani erişim sağlamış oluyoruz. Herhangi bir view tabanlı TagHelper kütüphanesini tek tek tanımlamamıza gerek kalmadan, _ViewImports üzerinden tek çatı altında TagHelper tanımlamasını yaparak, direkt olarak view’lerde operasyonlarımızı gerçekleştirebiliyoruz.
